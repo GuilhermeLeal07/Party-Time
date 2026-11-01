@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 
-const useToast = (msg, status = null) => {
+const notify = (msg, status = null) => {
     if (!status) {
         toast.success(msg, {
             position: "top-right",
@@ -26,4 +26,4 @@ const useToast = (msg, status = null) => {
     }
 };
 
-export default useToast;
+export default notify;

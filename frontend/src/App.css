@@ -1,0 +1,36 @@
+
+/* APLICAÇÃO PRINCIPAL */
+.App {
+    min-height: 100vh;
+    width: 100%;
+
+    background-color: var(--color-background);
+}
+
+/* ÁREA DE CONTEÚDO */
+.app-content {
+    min-height: 100vh;
+    margin-left: 260px;
+    padding: 2rem;
+
+    transition: margin-left 0.25s ease;
+}
+
+
+/* SIDEBAR RECOLHIDA */
+.App.sidebar-collapsed .app-content {
+    margin-left: 84px;
+}
+
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+
+    .app-content,
+    .App.sidebar-collapsed .app-content {
+        min-height: 100vh;
+        margin-left: 0;
+        padding: 1.5rem 1rem;
+        padding-top: 96px;
+    }
+}

@@ -1,14 +1,423 @@
-.party h1,
-.party h3,
-.party p {
-    text-align: center;
-    margin-bottom: 1rem;
+/* PÁGINA DE DETALHES */
+.party-page {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
+/* CABEÇALHO */
+.party-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.party-header > div:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+
+.party-subtitle,
+.party-section-label {
+    color: var(--color-gold);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+}
+
+.party-header h1 {
+    color: var(--color-primary);
+    font-size: clamp(2rem, 4vw, 2.7rem);
+    overflow-wrap: anywhere;
+}
+
+.party-header p {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+}
+
+/* AÇÕES */
 .actions-container {
     display: flex;
-    justify-content: center;
     align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.actions-container .btn {
+    min-height: 44px;
+}
+
+.btn-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 44px;
+    padding: 0.65rem 1.2rem;
+
+    border: 1px solid #B94A48;
+    border-radius: var(--radius-sm);
+
+    background-color: var(--color-surface);
+    color: #B94A48;
+
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.btn-danger:hover {
+    background-color: #B94A48;
+    color: var(--color-surface);
+}
+
+/* IMAGEM PRINCIPAL */
+.party-hero {
+    width: 100%;
+    height: 360px;
+    overflow: hidden;
+
+    margin-bottom: 2rem;
+
+    background-color: var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.party-main-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* INFORMAÇÕES DA FESTA */
+.party-information {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.party-description {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+
+    padding: 1.75rem;
+
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+}
+
+.party-description h2 {
+    color: var(--color-primary);
+    font-size: 1.65rem;
+}
+
+.party-author {
+    font-size: 0.88rem;
+}
+
+.party-author strong {
+    color: var(--color-text);
+}
+
+.party-description-text {
+    color: var(--color-text-secondary);
+    font-size: 0.92rem;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* ORÇAMENTO */
+.party-budget-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.8rem;
+
+    padding: 1.75rem;
+
+    background-color: var(--color-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.party-budget-card > span {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+.party-budget-card strong {
+    color: var(--color-surface);
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    overflow-wrap: anywhere;
+}
+
+.party-budget-card p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.78rem;
+    line-height: 1.5;
+}
+
+/* SERVIÇOS CONTRATADOS */
+.party-services-section {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.party-section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
     gap: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.party-section-heading > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.party-section-heading h2 {
+    color: var(--color-text);
+    font-size: 1.65rem;
+}
+
+.party-section-heading p {
+    color: var(--color-text-secondary);
+    font-size: 0.88rem;
+}
+
+.party-services-count {
+    flex-shrink: 0;
+    color: var(--color-primary);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+/* Grade de serviços */
+.party-services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.party-service-card {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-sm);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.party-service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.party-service-card > img {
+    display: block;
+    width: 100%;
+    height: 165px;
+    object-fit: cover;
+    background-color: var(--color-background);
+}
+
+.party-service-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+}
+
+.party-service-content h3 {
+    color: var(--color-text);
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.party-service-content span {
+    color: var(--color-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* ESTADO SEM SERVIÇOS */
+.party-empty-services {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+
+    padding: 3rem 1.5rem;
+
+    background-color: var(--color-surface);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+
+    text-align: center;
+}
+
+.party-empty-services h3 {
+    color: var(--color-text);
+    font-size: 1.1rem;
+}
+
+.party-empty-services p {
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+}
+
+/* ERRO DE CARREGAMENTO */
+.party-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    min-height: 350px;
+    padding: 2rem;
+
+    text-align: center;
+}
+
+.party-error h2 {
+    color: var(--color-text);
+    font-size: 1.4rem;
+}
+
+.party-error p {
+    color: var(--color-text-secondary);
+}
+
+.party-error .btn {
+    margin-top: 0.5rem;
+}
+
+/* RESPONSIVIDADE - NOTEBOOK */
+@media (max-width: 1100px) {
+    .party-information {
+        grid-template-columns: minmax(0, 1fr) 260px;
+        gap: 1.25rem;
+    }
+
+    .party-services-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* RESPONSIVIDADE - TABLET E CELULAR */
+@media (max-width: 768px) {
+    .party-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .actions-container {
+        width: 100%;
+    }
+
+    .actions-container > * {
+        flex: 1;
+    }
+
+    .party-hero {
+        height: 280px;
+    }
+
+    .party-information {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .party-description,
+    .party-budget-card {
+        padding: 1.4rem;
+    }
+
+    .party-budget-card {
+        min-height: 145px;
+    }
+
+    .party-services-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* RESPONSIVIDADE - CELULAR PEQUENO */
+@media (max-width: 480px) {
+    .party-header h1 {
+        font-size: 1.9rem;
+    }
+
+    .actions-container {
+        flex-direction: column;
+    }
+
+    .actions-container > * {
+        width: 100%;
+    }
+
+    .party-hero {
+        height: 220px;
+    }
+
+    .party-description h2,
+    .party-section-heading h2 {
+        font-size: 1.35rem;
+    }
+
+    .party-section-heading {
+        align-items: flex-start;
+    }
+
+    .party-services-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .party-service-card {
+        flex-direction: row;
+        align-items: stretch;
+    }
+
+    .party-service-card > img {
+        width: 115px;
+        height: auto;
+        min-height: 110px;
+    }
+
+    .party-service-content {
+        flex: 1;
+        justify-content: center;
+    }
 }

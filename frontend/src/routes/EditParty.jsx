@@ -2,164 +2,317 @@ import partyFetch from '../axios/config';
 
 import { useState, useEffect } from 'react';
 
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
-import useToast from '../hook/useToast';
+import notify from '../utils/notify';
 
-import './Form.css'
+import './Form.css';
 
 const EditParty = () => {
-    const { id } = useParams();
+  const { id } = useParams();
 
-    const [party, setParty] = useState(null);
+  const [party, setParty] = useState(null);
+  const [services, setServices] = useState([]);
+  const [loadingError, setLoadingError] = useState(false);
 
-    const [services, setServices] = useState([])
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  // Carrega os dados da festa e os serviços disponíveis
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setParty(null);
+        setLoadingError(false);
 
-    // Load services
-    useEffect(() => {
-        const loadServices = async () => {
-        const res = await partyFetch.get("/services");
+        const [partyResponse, servicesResponse] = await Promise.all([
+          partyFetch.get(`/parties/${id}`),
+          partyFetch.get('/services'),
+        ]);
 
-        console.log(res.data);
+        setParty(partyResponse.data);
+        setServices(servicesResponse.data);
+      } catch (error) {
+        console.error('Erro ao carregar os dados:', error);
 
-        setServices(res.data);
+        setLoadingError(true);
 
-        loadParty();
-        };
-
-        const loadParty = async () => {
-            const res = await partyFetch.get(`/parties/${id}`);
-
-
-            setParty(res.data);
-        };
-
-        loadServices();
-
-    }, []);
-
-    // Add or remove services
-    const handleServices = (e) => {
-        const checked = e.target.checked;
-        const value = e.target.value;
-
-        const filteredService = services.filter((s) => s._id === value);
-
-        let partyServices = party.services;
-
-        if (checked) {
-        partyServices = [...partyServices, filteredService[0]];
-        
-        } else {
-        partyServices = partyServices.filter((s) => s._id !== value);
-        }
-
-        setParty({ ...party, services: partyServices });
+        notify('Não foi possível carregar os dados da festa.', 'error');
+      }
     };
 
-    const updateParty = async (e) => {
-        e.preventDefault();
+    loadData();
+  }, [id]);
 
-        try {
-            const res = await partyFetch.put(`/parties/${party._id}`, party)
+  // Atualiza os campos da festa
+  const handleChange = (e) => {
+    const { name, value } = e.target;
 
-            if(res.status === 200) {
+    setParty((previousParty) => ({
+      ...previousParty,
+      [name]: value,
+    }));
+  };
 
-                navigate(`/party/${id}`);
-            }
-            
-        } catch (error) {
-            useToast(error.response.data.msg, "error")
+  // Adiciona ou remove serviços
+  const handleServices = (e, service) => {
+    const checked = e.target.checked;
+
+    setParty((previousParty) => {
+      let updatedServices;
+
+      if (checked) {
+        const alreadySelected = previousParty.services.some(
+          (item) => item._id === service._id
+        );
+
+        if (alreadySelected) {
+          return previousParty;
         }
-    }
 
-    if(!party) return <p>Carregando...</p>;
+        updatedServices = [...previousParty.services, service];
+      } else {
+        updatedServices = previousParty.services.filter(
+          (item) => item._id !== service._id
+        );
+      }
+
+      return {
+        ...previousParty,
+        services: updatedServices,
+      };
+    });
+  };
+
+  // Salva as alterações
+  const updateParty = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await partyFetch.put(
+        `/parties/${party._id}`,
+        party
+      );
+
+      if (res.status === 200) {
+        notify('Festa atualizada com sucesso!');
+        navigate(`/party/${id}`);
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar festa:', error);
+
+      const message =
+        error.response?.data?.msg ||
+        'Não foi possível atualizar a festa.';
+
+      notify(message, 'error');
+    }
+  };
+
+  // Erro ao carregar
+  if (loadingError) {
+    return (
+      <div className="party-error">
+        <h2>Não foi possível carregar esta festa.</h2>
+
+        <p>Ela pode não existir mais ou houve uma falha de conexão.</p>
+
+        <Link to="/" className="btn">
+          Voltar para minhas festas
+        </Link>
+      </div>
+    );
+  }
+
+  // Carregamento
+  if (!party) {
+    return (
+      <div className="home-loading">
+        <p>Carregando informações da festa...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className='form-page'>
-      <h2>Editando: {party.title}</h2>
-      <p>Ajuste as informações da sua festa</p>
-      <form onSubmit={(e) => updateParty(e)}>
-        <label>
-          <span>Nome da festa:</span>
-          <input 
-            type="text" 
-            placeholder='Seja criativo...' 
-            required 
-            onChange={(e) => setParty({ ...party, title: e.target.value })}
-            value={party.title}
-          />
-        </label>
-        <label>
-          <span>Anfitrião:</span>
-          <input 
-            type="text" 
-            placeholder='Quem está dando a festa?' 
-            required
-            onChange={(e) => setParty({ ...party, author: e.target.value })}
-            value={party.author} 
-          />
-        </label>
-        <label>
-          <span>Descrição:</span>
-          <textarea 
-            placeholder='Conte mais sobre a festa...' 
-            required
-            onChange={(e) => setParty({ ...party, description: e.target.value })}
-            value={party.description}
-          ></textarea>
-        </label>
-        <label>
-          <span>Orçamento:</span>
-          <input 
-            type="number" 
-            placeholder='Quanto você pretende investir?' 
-            required 
-            onChange={(e) => setParty({ ...party, budget: e.target.value })}
-            value={party.budget}
-          />
-        </label>
-        <label>
-          <span>Imagem:</span>
-          <input 
-            type="text" 
-            placeholder='Insira a URL de uma imagem' 
-            required
-            onChange={(e) => setParty({ ...party, image: e.target.value })}
-            value={party.image}
-          />
-        </label>
-        <div>
-          <h2>Escolha os serviços</h2>
-          <div className='services-container'>
-            {services.length === 0 && <p>Carregando...</p>}
-            {services.length > 0 && services.map((service) => (
-              <div className='service' key={service._id}>
-                <img src={service.image} alt={service.name} />
-                <p className='service-name'>{service.name}</p>
-                <p className='service-price'>R${service.price}</p>
-                <div className='checkbox-container'>
-                  <input 
-                    type="checkbox" 
-                    value={service._id} 
-                    onChange={(e) => handleServices(e)}
-                    checked={
-                        party.services.find((partyService) => partyService._id === service._id
-                    ) || ""
-                    }
-                    />
-                  <p>Marque para solicitar</p>
-                </div>
-              </div>
-            ))}
+    <div className="form-page form-page-edit">
+
+      {/* Cabeçalho */}
+      <header className="form-header">
+        <span className="form-subtitle">GERENCIE SEU EVENTO</span>
+
+        <h1>Editando: {party.title}</h1>
+
+        <p>
+          Ajuste as informações e os serviços contratados para sua festa.
+        </p>
+      </header>
+
+      <form className="party-form" onSubmit={updateParty}>
+
+        {/* Informações principais */}
+        <section className="form-section">
+
+          <div className="form-section-heading">
+            <span className="form-section-number">01</span>
+
+            <div>
+              <h2>Informações da festa</h2>
+              <p>Atualize os dados principais do seu evento.</p>
+            </div>
           </div>
+
+          <div className="form-fields">
+
+            <label>
+              <span>Nome da festa</span>
+
+              <input
+                type="text"
+                name="title"
+                placeholder="Nome da festa"
+                required
+                value={party.title}
+                onChange={handleChange}
+              />
+            </label>
+
+            <label>
+              <span>Anfitrião</span>
+
+              <input
+                type="text"
+                name="author"
+                placeholder="Nome do responsável"
+                required
+                value={party.author}
+                onChange={handleChange}
+              />
+            </label>
+
+            <label className="form-field-full">
+              <span>Descrição</span>
+
+              <textarea
+                name="description"
+                placeholder="Conte mais sobre sua festa..."
+                required
+                rows="4"
+                value={party.description}
+                onChange={handleChange}
+              />
+            </label>
+
+            <label>
+              <span>Orçamento (R$)</span>
+
+              <input
+                type="number"
+                name="budget"
+                min="0"
+                required
+                value={party.budget}
+                onChange={handleChange}
+              />
+            </label>
+
+            <label>
+              <span>Imagem do evento</span>
+
+              <input
+                type="text"
+                name="image"
+                placeholder="URL da imagem"
+                required
+                value={party.image}
+                onChange={handleChange}
+              />
+            </label>
+
+          </div>
+        </section>
+
+        {/* Serviços */}
+        <section className="form-section services-section">
+
+          <div className="form-section-heading">
+            <span className="form-section-number">02</span>
+
+            <div>
+              <h2>Serviços contratados</h2>
+              <p>
+                Selecione ou remova os serviços da sua festa.
+              </p>
+            </div>
+          </div>
+
+          <div className="services-container">
+
+            {services.length === 0 && (
+              <p className="services-empty">
+                Nenhum serviço disponível no momento.
+              </p>
+            )}
+
+            {services.map((service) => {
+              const isSelected = party.services.some(
+                (item) => item._id === service._id
+              );
+
+              return (
+                <label
+                  className={`service ${
+                    isSelected ? 'service-selected' : ''
+                  }`}
+                  key={service._id}
+                >
+                  <img
+                    src={service.image}
+                    alt={service.name}
+                  />
+
+                  <div className="service-content">
+                    <span className="service-name">
+                      {service.name}
+                    </span>
+
+                    <span className="service-price">
+                      R$ {service.price}
+                    </span>
+
+                    <div className="checkbox-container">
+                      <input
+                        type="checkbox"
+                        value={service._id}
+                        checked={isSelected}
+                        onChange={(e) => handleServices(e, service)}
+                      />
+
+                      <span>
+                        {isSelected
+                          ? 'Selecionado'
+                          : 'Selecionar serviço'}
+                      </span>
+                    </div>
+                  </div>
+                </label>
+              );
+            })}
+
+          </div>
+        </section>
+
+        {/* Ações */}
+        <div className="form-actions">
+          <button
+            type="submit"
+            className="btn form-submit-button"
+          >
+            Salvar alterações
+          </button>
         </div>
-        <input type="submit" value="Editar Festa" className='btn'/>
+
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default EditParty
+export default EditParty;

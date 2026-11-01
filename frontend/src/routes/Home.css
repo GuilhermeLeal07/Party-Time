@@ -1,32 +1,361 @@
-.home h1 {
-  text-align: center;
-  margin-bottom: 2rem;
+/* HOME - ESTRUTURA PRINCIPAL */
+.home {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
 }
 
-.parties-container p {
-  text-align: center;
+/* CABEÇALHO */
+.home-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
 }
+
+.home-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.home-subtitle {
+    color: var(--color-gold);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.home-heading h1 {
+    color: var(--color-primary);
+    font-size: clamp(2rem, 4vw, 2.8rem);
+}
+
+.home-heading p {
+    max-width: 560px;
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+}
+
+/* Botão de criação */
+.home-create-button {
+    flex-shrink: 0;
+    min-height: 46px;
+    padding: 0.75rem 1.4rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.home-create-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* RESUMO DOS EVENTOS */
+
+.home-summary {
+    margin-bottom: 3rem;
+}
+
+.summary-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.45rem;
+
+    width: 100%;
+    max-width: 280px;
+    min-height: 145px;
+    padding: 1.5rem;
+
+    background-color: var(--color-primary);
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-md);
+}
+
+.summary-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 1.3px;
+}
+
+.summary-value {
+    color: var(--color-surface);
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    line-height: 1.1;
+}
+
+.summary-description {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.8rem;
+}
+
+/* SEÇÃO DE EVENTOS */
+
+.home-parties {
+    width: 100%;
+}
+
+.section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.section-heading h2 {
+    margin-bottom: 0.4rem;
+    color: var(--color-text);
+    font-size: 1.65rem;
+}
+
+.section-heading p {
+    font-size: 0.88rem;
+}
+
+.parties-count {
+    color: var(--color-text-secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* CARDS DOS EVENTOS */
 
 .parties-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+    width: 100%;
 }
 
-.parties-container .party {
-  max-width: 380px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  margin-bottom: 1rem;
+.party-card {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-sm);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
-.parties-container .party img {
-  width: 100%;
+.party-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
 }
 
-.parties-container .btn-secondary {
-  max-width: 120px;
-  text-align: center;
+/* Imagem */
+
+.party-image-container {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background-color: var(--color-background);
+}
+
+.party-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    transition: transform 0.4s ease;
+}
+
+.party-card:hover .party-image {
+    transform: scale(1.04);
+}
+
+/* Conteúdo */
+
+.party-card-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+
+    min-height: 82px;
+    padding: 1rem 1.1rem;
+}
+
+.party-card-content h3 {
+    overflow: hidden;
+    color: var(--color-text);
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.party-details-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    flex-shrink: 0;
+
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    font-weight: 700;
+
+    transition: color 0.2s ease;
+}
+
+.party-details-link:hover {
+    color: var(--color-gold);
+}
+
+.party-details-link span {
+    font-size: 1.1rem;
+    transition: transform 0.2s ease;
+}
+
+.party-details-link:hover span {
+    transform: translateX(4px);
+}
+
+/* ESTADO VAZIO */
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+
+    min-height: 300px;
+    padding: 2rem;
+
+    background-color: var(--color-surface);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+
+    text-align: center;
+}
+
+.empty-state-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 58px;
+    height: 58px;
+
+    background-color: var(--color-background);
+    border-radius: 50%;
+
+    color: var(--color-primary);
+    font-size: 2rem;
+}
+
+.empty-state h3 {
+    font-size: 1.25rem;
+}
+
+.empty-state p {
+    max-width: 380px;
+    font-size: 0.88rem;
+}
+
+.empty-state .btn {
+    margin-top: 0.5rem;
+}
+
+/* CARREGAMENTO */
+
+.home-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+}
+
+.home-loading p {
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+}
+
+/* RESPONSIVIDADE - NOTEBOOK E TABLET */
+
+@media (max-width: 1100px) {
+    .parties-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* RESPONSIVIDADE - CELULAR */
+
+@media (max-width: 768px) {
+    .home-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 1.25rem;
+        margin-bottom: 2rem;
+    }
+
+    .home-create-button {
+        width: 100%;
+    }
+
+    .home-summary {
+        margin-bottom: 2.5rem;
+    }
+
+    .summary-card {
+        max-width: none;
+        min-height: 125px;
+    }
+
+    .section-heading {
+        align-items: flex-start;
+    }
+
+    .parties-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .party-card-content {
+        min-height: 76px;
+    }
+}
+
+@media (max-width: 480px) {
+    .home-heading h1 {
+        font-size: 2rem;
+    }
+
+    .home-heading p {
+        font-size: 0.85rem;
+    }
+
+    .section-heading h2 {
+        font-size: 1.4rem;
+    }
+
+    .parties-count {
+        font-size: 0.72rem;
+    }
+
+    .party-card-content {
+        padding: 0.9rem;
+    }
+
+    .party-card-content h3 {
+        font-size: 0.88rem;
+    }
 }
