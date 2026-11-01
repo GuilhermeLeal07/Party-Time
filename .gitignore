@@ -1,0 +1,19 @@
+# Dependências
+**/node_modules/
+
+# Variáveis de ambiente
+.env
+.env.*
+
+# Credenciais
+/credenciais/
+
+# Arquivos temporários
+*.tmp.js
+
+# Arquivos compactados locais
+/backend.zip
+/backend-revisao.zip
+
+# Logs
+npm-debug.log*

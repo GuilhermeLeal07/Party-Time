@@ -1,0 +1,98 @@
+# SERVICES — CRUD de serviços
+
+### Criar um serviço novo
+POST http://localhost:3000/api/services
+Content-Type: application/json
+
+{
+    "name": "Decoração",
+    "description": "Escolha a decoração para sua festa, e nós a montamos.",
+    "price": 1400,
+    "image": "https://images.unsplash.com/photo-1478146059778-26028b07395a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=892&q=80"
+  }
+
+### Listar todos os serviços
+GET http://localhost:3000/api/services
+
+### Buscar um serviço específico pelo id
+GET http://localhost:3000/api/services/6aad7862711fe4afa552c1e3
+
+### Deletar um serviço pelo id
+DELETE  http://localhost:3000/api/services/6aada9bd351c60ffbc1f3912
+
+### Atualizar um serviço existente (troca todos os campos abaixo)
+PUT http://localhost:3000/api/services/6aad7bf21f5ff382dfac06ef
+Content-Type: application/json
+
+{
+    "name": "TESTE ATUALIZACAO",
+    "description": "Alguma descrição",
+    "price": 2700,
+    "image": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+}
+
+
+# PARTIES — CRUD de festas
+
+
+### Criar uma festa nova, já com uma lista de serviços vinculados
+# Obs: se a soma dos preços dos services ultrapassar o budget, a API retorna 406
+POST  http://localhost:3000/api/parties
+Content-Type: application/json
+
+{
+    "title": "Meu evento",
+    "author": "Guilherme",
+    "description": "Uma festa de aniversário",
+    "budget": 9000,
+    "image": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+    "services": [
+        {
+            "name": "Algum serviço 1",
+            "description": "Alguma descrição",
+            "price": 3000,
+            "image": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+        },
+        {
+            "name": "Algum serviço 2",
+            "description": "Alguma descrição",
+            "price": 1600,
+            "image": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+        }
+    ]
+}
+
+### Listar todas as festas
+GET http://localhost:3000/api/parties
+
+### Buscar uma festa específica pelo id
+GET http://localhost:3000/api/parties/6aada9bd351c60ffbc1f3912
+
+### (repetida acima — pode apagar uma das duas) Buscar a mesma festa de novo
+GET http://localhost:3000/api/parties/6aada9bd351c60ffbc1f3912
+
+### Atualizar uma festa existente (troca todos os campos abaixo, inclusive os services)
+PUT http://localhost:3000/api/parties/6aada9bd351c60ffbc1f3912
+Content-Type: application/json
+
+{
+    "title": "Meu evento",
+    "author": "Guilherme",
+    "description": "Uma festa de aniversário",
+    "budget": 10000,
+    "image": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+    "services": [
+        {
+            "name": "Algum serviço 1",
+            "description": "Alguma descrição",
+            "price": 3000,
+            "image": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+        },
+        {
+            "name": "Algum serviço 2",
+            "description": "Alguma descrição",
+            "price": 1600,
+            "image": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+        }
+    ]
+}
