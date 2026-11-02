@@ -1,3 +1,4 @@
+
 import { NavLink } from 'react-router-dom';
 
 import './Navbar.css';
@@ -12,7 +13,7 @@ const Navbar = ({
   return (
     <>
       <header className="mobile-header">
-        <h2>PJ Party Time</h2>
+        <h2>Party Time</h2>
 
         <button
           className="mobile-menu-button"
@@ -46,7 +47,7 @@ const Navbar = ({
       >
         <div className="sidebar-header">
           <h2 className="sidebar-brand">
-            {isCollapsed ? 'PJ' : 'PJ Party Time'}
+            {isCollapsed ? 'PT' : 'Party Time'}
           </h2>
 
           <button
