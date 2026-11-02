@@ -8,20 +8,50 @@ import "./Home.css";
 
 const Home = () => {
   const [parties, setParties] = useState(null);
+  const [loadingError, setLoadingError] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     const loadParties = async () => {
       try {
+        setLoadingError(false);
+
         const res = await partyFetch.get("/parties");
+
         setParties(res.data);
       } catch (error) {
         console.error("Erro ao carregar as festas:", error);
-        setParties([]);
+
+        setLoadingError(true);
       }
     };
 
     loadParties();
-  }, []);
+  }, [reloadKey]);
+
+  // Tenta carregar as festas novamente
+  const handleRetry = () => {
+    setParties(null);
+    setReloadKey((previous) => previous + 1);
+  };
+
+  if (loadingError) {
+    return (
+      <div className="party-error">
+        <h2>Não foi possível carregar suas festas.</h2>
+
+        <p>Verifique sua conexão e tente novamente.</p>
+
+        <button
+          type="button"
+          className="btn"
+          onClick={handleRetry}
+        >
+          Tentar novamente
+        </button>
+      </div>
+    );
+  }
 
   if (parties === null) {
     return (

@@ -13,7 +13,8 @@ const EditParty = () => {
 
   const [party, setParty] = useState(null);
   const [services, setServices] = useState([]);
-  const [loadingError, setLoadingError] = useState(false);
+  const [errorType, setErrorType] = useState(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   const navigate = useNavigate();
 
@@ -22,7 +23,7 @@ const EditParty = () => {
     const loadData = async () => {
       try {
         setParty(null);
-        setLoadingError(false);
+        setErrorType(null);
 
         const [partyResponse, servicesResponse] = await Promise.all([
           partyFetch.get(`/parties/${id}`),
@@ -34,14 +35,26 @@ const EditParty = () => {
       } catch (error) {
         console.error('Erro ao carregar os dados:', error);
 
-        setLoadingError(true);
+        const status = error.response?.status;
+
+        // 404 (não existe) e 400 (ID inválido): a festa não pode ser carregada
+        if (status === 404 || status === 400) {
+          setErrorType('not-found');
+        } else {
+          setErrorType('failure');
+        }
 
         notify('Não foi possível carregar os dados da festa.', 'error');
       }
     };
 
     loadData();
-  }, [id]);
+  }, [id, reloadKey]);
+
+  // Tenta carregar os dados novamente
+  const handleRetry = () => {
+    setReloadKey((previous) => previous + 1);
+  };
 
   // Atualiza os campos da festa
   const handleChange = (e) => {
@@ -108,17 +121,36 @@ const EditParty = () => {
     }
   };
 
-  // Erro ao carregar
-  if (loadingError) {
+  // Festa inexistente ou ID inválido
+  if (errorType === 'not-found') {
     return (
       <div className="party-error">
-        <h2>Não foi possível carregar esta festa.</h2>
+        <h2>Esta festa não existe ou foi excluída.</h2>
 
-        <p>Ela pode não existir mais ou houve uma falha de conexão.</p>
+        <p>Confira o endereço ou volte para a lista de festas.</p>
 
         <Link to="/" className="btn">
           Voltar para minhas festas
         </Link>
+      </div>
+    );
+  }
+
+  // Falha de conexão ou erro do servidor
+  if (errorType === 'failure') {
+    return (
+      <div className="party-error">
+        <h2>Não foi possível carregar esta festa.</h2>
+
+        <p>Verifique sua conexão e tente novamente.</p>
+
+        <button
+          type="button"
+          className="btn"
+          onClick={handleRetry}
+        >
+          Tentar novamente
+        </button>
       </div>
     );
   }

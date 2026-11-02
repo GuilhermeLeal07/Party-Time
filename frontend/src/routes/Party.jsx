@@ -12,7 +12,8 @@ const Party = () => {
   const { id } = useParams();
 
   const [party, setParty] = useState(null);
-  const [loadingError, setLoadingError] = useState(false);
+  const [errorType, setErrorType] = useState(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   const navigate = useNavigate();
 
@@ -21,7 +22,7 @@ const Party = () => {
     const loadParty = async () => {
       try {
         setParty(null);
-        setLoadingError(false);
+        setErrorType(null);
 
         const res = await partyFetch.get(`/parties/${id}`);
 
@@ -29,12 +30,24 @@ const Party = () => {
       } catch (error) {
         console.error('Erro ao carregar festa:', error);
 
-        setLoadingError(true);
+        const status = error.response?.status;
+
+        // 404 (não existe) e 400 (ID inválido): a festa não pode ser carregada
+        if (status === 404 || status === 400) {
+          setErrorType('not-found');
+        } else {
+          setErrorType('failure');
+        }
       }
     };
 
     loadParty();
-  }, [id]);
+  }, [id, reloadKey]);
+
+  // Tenta carregar a festa novamente
+  const handleRetry = () => {
+    setReloadKey((previous) => previous + 1);
+  };
 
   // Exclui a festa
   const handleDelete = async () => {
@@ -62,26 +75,45 @@ const Party = () => {
     }
   };
 
-  // Carregamento
-  if (!party && !loadingError) {
+  // Festa inexistente ou ID inválido
+  if (errorType === 'not-found') {
     return (
-      <div className="home-loading">
-        <p>Carregando informações da festa...</p>
+      <div className="party-error">
+        <h2>Esta festa não existe ou foi excluída.</h2>
+
+        <p>Confira o endereço ou volte para a lista de festas.</p>
+
+        <Link to="/" className="btn">
+          Voltar para minhas festas
+        </Link>
       </div>
     );
   }
 
-  // Erro ao carregar
-  if (loadingError) {
+  // Falha de conexão ou erro do servidor
+  if (errorType === 'failure') {
     return (
       <div className="party-error">
         <h2>Não foi possível carregar esta festa.</h2>
 
         <p>Verifique sua conexão e tente novamente.</p>
 
-        <Link to="/" className="btn">
-          Voltar para minhas festas
-        </Link>
+        <button
+          type="button"
+          className="btn"
+          onClick={handleRetry}
+        >
+          Tentar novamente
+        </button>
+      </div>
+    );
+  }
+
+  // Carregamento
+  if (!party) {
+    return (
+      <div className="home-loading">
+        <p>Carregando informações da festa...</p>
       </div>
     );
   }
